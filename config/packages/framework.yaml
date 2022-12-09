@@ -18,6 +18,18 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        default_options:
+            max_redirects: 5
+        scoped_clients:
+            # Specialized client to consume the PunkAPI
+            punk.api.client:
+                timeout: 10
+                base_uri: 'https://api.punkapi.com/v2/beers'
+                headers:
+                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
+
 when@test:
     framework:
         test: true
