@@ -1,0 +1,9 @@
+get_beer:
+    path: /beers/{id}
+    controller: App\PunkApi\Beers\Infrastructure\Controller\BeerController::get_beer
+    methods: GET
+
+list_beer:
+    path: /beers
+    controller: App\PunkApi\Beers\Infrastructure\Controller\BeerController::list
+    methods: GET
