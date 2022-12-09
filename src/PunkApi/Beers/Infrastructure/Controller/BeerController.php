@@ -10,17 +10,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 class BeerController extends AbstractController
 {
     private string $base_url = 'https://api.punkapi.com/v2/beers/';
 
-    public function get_beer(GetBeerUseCase $getBeersUseCase, HttpClientInterface $httpClient, string $id): JsonResponse
+    public function get_beer(GetBeerUseCase $getBeersUseCase, HttpClientInterface $httpClient, string $id, CacheInterface $beerCache): JsonResponse
     {
-        $response = $httpClient->request('GET', $this->base_url.$id);
-        $data = $response->toArray();
-        $dataConverted = $getBeersUseCase->normalizeResponse($data);
-        return $this->json($dataConverted, Response::HTTP_OK);
+        return $beerCache->get("get-beer-$id", function (ItemInterface $item) use ($getBeersUseCase, $id, $httpClient) {
+            $item->expiresAfter(3600);
+            var_dump('No está en cache');
+            $data = [];
+            $response = $httpClient->request('GET', $this->base_url.$id);
+            $data = $response->toArray();
+            $dataConverted = $getBeersUseCase->normalizeResponse($data);;
+            return $this->json($dataConverted, Response::HTTP_OK);
+        });
+
     }
 
     public function list(GetBeerUseCase $getBeersUseCase, HttpClientInterface $httpClient, Request $request): JsonResponse
