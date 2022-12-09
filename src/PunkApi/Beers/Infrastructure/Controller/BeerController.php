@@ -2,15 +2,15 @@
 
 namespace App\PunkApi\Beers\Infrastructure\Controller;
 
-
 use App\PunkApi\Beers\Application\GetBeerUseCase;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 class BeerController extends AbstractController
 {
     private string $base_url = 'https://api.punkapi.com/v2/beers/';

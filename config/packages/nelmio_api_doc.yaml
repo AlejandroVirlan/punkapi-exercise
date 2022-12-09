@@ -1,0 +1,68 @@
+
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Punk API Swagger
+            description: Short demo of Punk API documentation with Symfony and Swagger
+            version: 1.0.0
+        paths:
+            /api/beers:
+                get:
+                    summary: Retrieves the collection of Beer resources
+                    description: Retrieves the collection of Beer resources
+                    tags:
+                        - Beer
+                    parameters:
+                        - in: query
+                          name: food
+                          description: The collection filtered by food
+                          example: Paella
+                          schema:
+                              type: string
+                    responses:
+                        200:
+                            description: Beer collection
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Beer'
+            /api/beers/{id}:
+                get:
+                    summary: Retrieves a Beer resource
+                    description: Retrieves a Beer resource
+                    tags:
+                        - Beer
+                    parameters:
+                        - in: path
+                          name: id
+                          required: true
+                          schema:
+                              type: integer
+                    responses:
+                        200:
+                            description: Beer resource
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Beer'
+                        404:
+                            description: Resource not found
+        components:
+            schemas:
+                Beer:
+                    type: object
+                    properties:
+                        id: { type: string, readOnly: true, example: 1 }
+                        name: { type: string, example: 'Buzz' }
+                        tagline: { type: string, example: 'A Real Bitter Experience.' }
+                        first_brewed: { type: date, example: '09/2007', readOnly: true }
+                        description: { type: string, example: 'A light, crisp and bitter IPA brewed with English and American hops. A small batch brewed only once.' }
+                        image_url: { type: string, example: 'https://images.punkapi.com/v2/keg.png', readOnly: true, nullable: true }
+                        food_pairing: { type: array, items: string, example: ["Spicy chicken tikka masala", "Grilled chicken quesadilla", "Caramel toffee cake"], readOnly: true }
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!(/doc|/doc.json)$) # Accepts routes under /api except /api/doc
